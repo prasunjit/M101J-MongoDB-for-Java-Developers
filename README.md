@@ -4,7 +4,7 @@ This course will go over basic installation, JSON, schema design, querying, inse
 
 Software: Java 7, MongoDB Java Driver 3.0.0, Spark 1.1.1, FreeMarker 2.3.19, Maven 2, and mongoProc 3.0+
 
-Agenda
+Agenda</br>
 Week 1: Introduction and Overview
 Week 2: Creating, Reading and Updating Data (CRUD)
 Week 3: Schema Design

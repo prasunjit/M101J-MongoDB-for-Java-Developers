@@ -1,16 +1,27 @@
 package course;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
+
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BlogPostDAO {
-    MongoCollection<Document> postsCollection;
+    //MongoCollection<Document> postsCollection;
+	MongoCollection<Document> postCollection;
 
     public BlogPostDAO(final MongoDatabase blogDatabase) {
-        postsCollection = blogDatabase.getCollection("posts");
+    	postCollection = blogDatabase.getCollection("posts");
     }
 
     // Return a single post corresponding to a permalink
@@ -18,9 +29,8 @@ public class BlogPostDAO {
 
         // XXX HW 3.2,  Work Here
         Document post = null;
-
-
-
+        BasicDBObject dbObject = new BasicDBObject("permalink", permalink);
+        post = postCollection.find(dbObject).first();
         return post;
     }
 
@@ -30,9 +40,11 @@ public class BlogPostDAO {
 
         // XXX HW 3.2,  Work Here
         // Return a list of DBObjects, each one a post from the posts collection
-        List<Document> posts = null;
-
-        return posts;
+       List<Document> posts = (List<Document>) postCollection.find()
+    		                  .sort(Sorts.descending("date"))
+    		                  .limit(limit)
+    		                  .into(new ArrayList<Document>());
+		return posts;
     }
 
 
@@ -56,9 +68,15 @@ public class BlogPostDAO {
         // - we created the permalink for you above.
 
         // Build the post object and insert it
-        Document post = new Document();
-
-
+        Document post = new Document()
+				        .append("author", username)
+				        .append("title", title)
+				        .append("body", body)
+				        .append("permalink", permalink)
+				        .append("tags", tags)
+				        .append("comments", new ArrayList())
+				        .append("date", new Date());
+        postCollection.insertOne(post);
         return permalink;
     }
 

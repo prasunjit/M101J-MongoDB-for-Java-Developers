@@ -134,7 +134,7 @@ public class BlogController {
 
                 System.out.println("/post: get " + permalink);
 
-                Document post = blogPostDAO.findByPermalink(permalink);
+                Document post = (Document) blogPostDAO.findByPermalink(permalink);
                 if (post == null) {
                     response.redirect("/post_not_found");
                 }
@@ -327,7 +327,7 @@ public class BlogController {
                 String body = StringEscapeUtils.escapeHtml4(request.queryParams("commentBody"));
                 String permalink = request.queryParams("permalink");
 
-                Document post = blogPostDAO.findByPermalink(permalink);
+                Document post = (Document) blogPostDAO.findByPermalink(permalink);
                 if (post == null) {
                     response.redirect("/post_not_found");
                 }
